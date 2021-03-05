@@ -5,6 +5,7 @@ import EditScreenInfo from "../components/EditScreenInfo";
 import { Text, View } from "../components/Themed";
 import { Input, Button } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { LoginApi } from "../api/userApi";
 
 export default function LandingPage({ isLogin, setIsLogin }) {
     if (isLogin) {
@@ -13,8 +14,13 @@ export default function LandingPage({ isLogin, setIsLogin }) {
     const [username, setUsername] = React.useState("");
     const [password, setPassword] = React.useState("");
 
-    const onLoginPrees = () => {
-        setIsLogin(true);
+    const onLoginPress = async () => {
+        const status = await LoginApi({ username, password });
+        if (status === 500) {
+            setIsLogin(false);
+        } else {
+            setIsLogin(true);
+        }
     };
     return (
         <View style={styles.container}>
@@ -31,18 +37,18 @@ export default function LandingPage({ isLogin, setIsLogin }) {
                     // leftIcon={{ type: "font-awesome", name: "comment" }}
                     onChangeText={(value) => setUsername(value)}
                 />
-                {/* <Input
+                <Input
                     label={"Password"}
                     // placeholder="Password"
                     // leftIcon={{ type: "font-awesome", name: "comment" }}
-                    onChangeText={(value) => this.setState({ comment: value })}
-                /> */}
+                    onChangeText={(value) => setPassword(value)}
+                />
             </View>
             <Button
                 style={{ width: 250 }}
                 title="Login"
                 type="solid"
-                onPress={onLoginPrees}
+                onPress={onLoginPress}
             />
         </View>
     );
@@ -53,7 +59,6 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
-        
     },
     title: {
         fontSize: 20,

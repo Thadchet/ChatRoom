@@ -11,7 +11,7 @@ import { Input, Button } from "react-native-elements";
 import { Icon } from "react-native-elements";
 import EditScreenInfo from "../components/EditScreenInfo";
 import { Text, View } from "../components/Themed";
-
+import { PingApi } from "../api/userApi";
 export default function HomePage({ navigation }) {
     const [profile, setProfile] = React.useState([{ key: "bosskung" }]);
     const [status, setStatus] = React.useState("Eiei");
@@ -114,10 +114,11 @@ export default function HomePage({ navigation }) {
                             <Pressable
                                 style={[styles.button, styles.buttonClose]}
                                 onPress={() => {
+                                    PingApi()
                                     setModalVisible(!modalVisible);
-                                    navigation.navigate("ChatRoom", {
-                                        name: selectedUser,
-                                    });
+                                    // navigation.navigate("ChatRoom", {
+                                    //     name: selectedUser,
+                                    // });
                                 }}
                             >
                                 <Icon name="chat" type="material" size="50" />
@@ -263,7 +264,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         padding: 35,
         alignItems: "center",
-        width : "60%",
+        width: "60%",
         shadowColor: "#000",
         // shadowOffset: {
         //     width: 0,
