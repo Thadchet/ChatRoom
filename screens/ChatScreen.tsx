@@ -104,6 +104,7 @@ const styles = StyleSheet.create({
         flex: 1,
         margin: 10,
         flexDirection: "column",
+        
     },
     time: {
         padding: 10,

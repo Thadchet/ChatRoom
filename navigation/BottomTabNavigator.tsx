@@ -1,6 +1,9 @@
 import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createStackNavigator } from "@react-navigation/stack";
+import {
+    createStackNavigator,
+    HeaderBackButton,
+} from "@react-navigation/stack";
 import * as React from "react";
 
 import Colors from "../constants/Colors";
@@ -14,6 +17,7 @@ import {
     TabTwoParamList,
     TabChatParamList,
 } from "../types";
+import { Icon } from "react-native-elements";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -75,7 +79,9 @@ function MainNavigator() {
             <TabOneStack.Screen
                 name="Home"
                 component={HomePage}
-                options={{ headerTitle: "Home" }}
+                options={{
+                    headerTitle: "Home",
+                }}
             />
         </TabOneStack.Navigator>
     );

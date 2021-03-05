@@ -4,21 +4,37 @@ import { StyleSheet, FlatList, Image, TouchableHighlight } from "react-native";
 import EditScreenInfo from "../components/EditScreenInfo";
 import { Text, View } from "../components/Themed";
 import { Input, Button } from "react-native-elements";
+import { GiftedChat } from "react-native-gifted-chat";
 
 export default function ChatRoomScreen({ route, navigation }) {
-    // const { name } = route.params;
+    const [messages, setMessages] = React.useState([
+        {
+            _id: 0,
+            text: "New room created.",
+            createdAt: new Date().getTime(),
+            system: true,
+        },
+        // example of chat message
+        {
+            _id: 1,
+            text: "Henlo!",
+            createdAt: new Date().getTime(),
+            user: {
+                _id: 2,
+                name: "Test User",
+            },
+        },
+    ]);
 
+    const handleSend = (newMessage) => {
+        setMessages(GiftedChat.append(messages, newMessage));
+    };
     return (
-        <View style={styles.container}>
-            <View style={{ padding: 30, width: "100%" }}>
-                <Input
-                    label={"Username"}
-                    // placeholder="Username"
-                    // leftIcon={{ type: "font-awesome", name: "comment" }}
-                />
-            </View>
-            <Button style={{ width: 250 }} title="Login" type="solid" />
-        </View>
+        <GiftedChat
+            messages={messages}
+            onSend={(newMessage) => handleSend(newMessage)}
+            user={{ _id: 1 }}
+        />
     );
 }
 
