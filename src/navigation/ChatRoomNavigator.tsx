@@ -14,7 +14,7 @@ import {
     TabTwoParamList,
     TabChatParamList,
     ChatRoomParamList,
-} from "../types";
+} from "../../types";
 
 const ChatRoom = createStackNavigator<ChatRoomParamList>();
 

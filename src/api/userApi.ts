@@ -17,11 +17,11 @@ export const LoginApi = async (userBody) => {
     const status = await axios
         .post(apiEndpoint + "user/login", userBody)
         .then((res) => {
-            // console.log(res.data);
+            console.log(res.data.token);
             return 200;
         })
         .catch((err) => {
-            console.log(err);
+            console.log(err.errors);
             return 500;
         });
     return status;

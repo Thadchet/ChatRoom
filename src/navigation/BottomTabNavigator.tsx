@@ -16,7 +16,7 @@ import {
     TabOneParamList,
     TabTwoParamList,
     TabChatParamList,
-} from "../types";
+} from "../../types";
 import { Icon } from "react-native-elements";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();

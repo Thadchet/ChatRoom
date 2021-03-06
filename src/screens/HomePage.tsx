@@ -12,14 +12,23 @@ import { Icon } from "react-native-elements";
 import EditScreenInfo from "../components/EditScreenInfo";
 import { Text, View } from "../components/Themed";
 import { PingApi } from "../api/userApi";
+import { useSelector, useDispatch } from "react-redux";
+
+import { RootState } from "../redux/reducers";
+
 export default function HomePage({ navigation }) {
     const [profile, setProfile] = React.useState([{ key: "bosskung" }]);
-    const [status, setStatus] = React.useState("Eiei");
-    const [friends, setFriends] = React.useState(["Paremai", "Kwai", "Eiei"]);
+    // const [status, setStatus] = React.useState("Eiei");
+    const [friends, setFriends] = React.useState(["A", "B", "C"]);
     const [modalVisible, setModalVisible] = React.useState(false);
     const [modalAddVisible, setModalAddVisible] = React.useState(false);
     const [selectedUser, setSelectedUser] = React.useState("");
     const [findUser, setFindUser] = React.useState("");
+
+    const dispatch = useDispatch();
+    const { username, status, token } = useSelector(
+        (state: RootState) => state.user
+    );
 
     React.useLayoutEffect(() => {
         navigation.setOptions({
@@ -114,7 +123,7 @@ export default function HomePage({ navigation }) {
                             <Pressable
                                 style={[styles.button, styles.buttonClose]}
                                 onPress={() => {
-                                    PingApi()
+                                    PingApi();
                                     setModalVisible(!modalVisible);
                                     // navigation.navigate("ChatRoom", {
                                     //     name: selectedUser,
@@ -190,7 +199,7 @@ export default function HomePage({ navigation }) {
                                 }}
                             />
                             <View style={styles.subProfile}>
-                                <Text style={styles.title}>{item.key}</Text>
+                                <Text style={styles.title}>{username}</Text>
                                 <Text
                                     style={styles.subtitle}
                                 >{`Status : ${status}`}</Text>

@@ -5,23 +5,22 @@ import EditScreenInfo from "../components/EditScreenInfo";
 import { Text, View } from "../components/Themed";
 import { Input, Button } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { LoginApi } from "../api/userApi";
+import { login } from "../redux/actions/user.actions";
+import {
+    updateStories,
+    updateMyStory,
+    watchStory,
+} from "../redux/actions/stories.actions";
+import { useSelector, useDispatch } from "react-redux";
 
-export default function LandingPage({ isLogin, setIsLogin }) {
-    if (isLogin) {
-        console.log("Logined");
-    }
+export default function LandingPage() {
     const [username, setUsername] = React.useState("");
     const [password, setPassword] = React.useState("");
-
-    const onLoginPress = async () => {
-        const status = await LoginApi({ username, password });
-        if (status === 500) {
-            setIsLogin(false);
-        } else {
-            setIsLogin(true);
-        }
+    const dispatch = useDispatch();
+    const onLoginPress = () => {
+        dispatch(login({ username, password }));
     };
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Login Page</Text>
@@ -48,8 +47,16 @@ export default function LandingPage({ isLogin, setIsLogin }) {
                 style={{ width: 250 }}
                 title="Login"
                 type="solid"
-                onPress={onLoginPress}
+                onPress={() => onLoginPress()}
             />
+            {/* <Button
+                style={{ width: 250, marginTop: 10 }}
+                title="Check"
+                type="solid"
+                onPress={() => {
+                    console.log(token);
+                }}
+            /> */}
         </View>
     );
 }
