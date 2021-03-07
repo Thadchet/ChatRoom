@@ -1,3 +1,10 @@
+import { getSession } from "../lib/session";
+
+let headers = {
+    "Content-Type": "application/json",
+    Authorization: getSession().token,
+};
+
 export async function postToServer(path, body = {}) {
     let responseData = null;
     console.log("post method");
@@ -9,8 +16,8 @@ export async function postToServer(path, body = {}) {
             {
                 method: "POST",
                 headers: {
-                    // 'Accept': 'application/json',
                     "Content-Type": "application/json",
+                    Authorization: getSession().token,
                 },
                 body: JSON.stringify(body),
             }
@@ -37,7 +44,13 @@ export async function getFromServer(path) {
     try {
         const response = await fetch(
             // process.env.REACT_APP_URL_BASE  +
-            path
+            path,
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: getSession().token,
+                },
+            }
         );
         if (!response.ok) return Promise.reject(response);
         else {

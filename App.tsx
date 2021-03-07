@@ -8,10 +8,12 @@ import LandingPage from "./src/screens/LandingPage";
 
 import { Provider } from "react-redux";
 import { store } from "./src/redux";
-export default function App() {
+import { setSession } from "./src/lib/session";
+
+export default function App({ Token }) {
     const isLoadingComplete = useCachedResources();
     const colorScheme = useColorScheme();
-
+    setSession({ token: Token });
     if (!isLoadingComplete) {
         return null;
     } else {
@@ -19,7 +21,6 @@ export default function App() {
             <Provider store={store}>
                 <SafeAreaProvider>
                     <Navigation colorScheme={colorScheme} />
-
                     <StatusBar />
                 </SafeAreaProvider>
             </Provider>

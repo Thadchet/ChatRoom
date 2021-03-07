@@ -1,5 +1,7 @@
 export type RootStackParamList = {
     Root: undefined;
+    // LandingPage: undefined;
+    // ChatRoom: undefined;
     NotFound: undefined;
 };
 

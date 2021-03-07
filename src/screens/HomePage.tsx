@@ -9,26 +9,46 @@ import {
 } from "react-native";
 import { Input, Button } from "react-native-elements";
 import { Icon } from "react-native-elements";
-import EditScreenInfo from "../components/EditScreenInfo";
 import { Text, View } from "../components/Themed";
-import { PingApi } from "../api/userApi";
+import { FoundUser } from "../components";
 import { useSelector, useDispatch } from "react-redux";
-
+import {
+    getUser,
+    login,
+    findUser,
+    getFriends,
+} from "../redux/actions/user.actions";
+import { createChat, getAllChat } from "../redux/actions/chat.actions";
 import { RootState } from "../redux/reducers";
+import { setSession, getSession, isSessionExpire } from "../lib/session";
+import _ from "lodash";
 
 export default function HomePage({ navigation }) {
     const [profile, setProfile] = React.useState([{ key: "bosskung" }]);
-    // const [status, setStatus] = React.useState("Eiei");
     const [friends, setFriends] = React.useState(["A", "B", "C"]);
     const [modalVisible, setModalVisible] = React.useState(false);
     const [modalAddVisible, setModalAddVisible] = React.useState(false);
     const [selectedUser, setSelectedUser] = React.useState("");
-    const [findUser, setFindUser] = React.useState("");
+    const [selectedID, setSelectedID] = React.useState("");
+    const [findUserInput, setFindUserInput] = React.useState("");
 
     const dispatch = useDispatch();
-    const { username, status, token } = useSelector(
-        (state: RootState) => state.user
-    );
+    const {
+        username,
+        status,
+        token,
+        findUsername,
+        findUserProfile,
+        isFoundUser,
+        friendList,
+    } = useSelector((state: RootState) => state.user);
+    const { chatRoomList } = useSelector((state: RootState) => state.chat);
+
+    React.useEffect(() => {
+        dispatch(getUser());
+        dispatch(getFriends());
+        dispatch(getAllChat());
+    }, []);
 
     React.useLayoutEffect(() => {
         navigation.setOptions({
@@ -45,6 +65,9 @@ export default function HomePage({ navigation }) {
         });
     }, [navigation]);
 
+    const checkRoom = () => {
+        return _.includes(_.map(chatRoomList, "RoomName"), selectedUser);
+    };
     const renderModalAdd = () => {
         return (
             <View style={styles.centeredView}>
@@ -59,22 +82,29 @@ export default function HomePage({ navigation }) {
                 >
                     <View style={styles.centeredView}>
                         <View style={styles.modalView}>
+                            {isFoundUser && (
+                                <FoundUser
+                                    username={findUsername}
+                                    profile={findUserProfile}
+                                />
+                            )}
                             <Input
                                 label={"Username"}
-                                // placeholder="Username"
-                                // leftIcon={{ type: "font-awesome", name: "comment" }}
-                                onChangeText={(value) => setFindUser(value)}
+                                onChangeText={(value) =>
+                                    setFindUserInput(value)
+                                }
                             />
 
                             <Pressable
                                 style={[styles.button, styles.buttonClose]}
-                                onPress={() =>
-                                    setModalAddVisible(!modalAddVisible)
-                                }
+                                onPress={() => {
+                                    dispatch(
+                                        findUser({ username: findUserInput })
+                                    );
+                                }}
                             >
                                 <Text style={styles.textStyle}>Find</Text>
                             </Pressable>
-
                             <Pressable
                                 style={[styles.button, styles.buttonClose]}
                                 onPress={() =>
@@ -82,6 +112,12 @@ export default function HomePage({ navigation }) {
                                 }
                             >
                                 <Text style={styles.textStyle}>Close</Text>
+                            </Pressable>
+                            <Pressable
+                                style={[styles.button, styles.buttonClose]}
+                                onPress={() => console.log(isFoundUser)}
+                            >
+                                <Text style={styles.textStyle}>Check</Text>
                             </Pressable>
                         </View>
                     </View>
@@ -103,7 +139,11 @@ export default function HomePage({ navigation }) {
                     }}
                 >
                     <View style={styles.centeredView}>
-                        <View>
+                        <View
+                            style={{
+                                alignItems: "center",
+                            }}
+                        >
                             <Image
                                 source={{
                                     uri:
@@ -123,11 +163,22 @@ export default function HomePage({ navigation }) {
                             <Pressable
                                 style={[styles.button, styles.buttonClose]}
                                 onPress={() => {
-                                    PingApi();
                                     setModalVisible(!modalVisible);
-                                    // navigation.navigate("ChatRoom", {
-                                    //     name: selectedUser,
-                                    // });
+                                    if (!checkRoom()) {
+                                        dispatch(
+                                            createChat({
+                                                memberID: selectedID,
+                                                memberName: selectedUser,
+                                            })
+                                        );
+                                        navigation.navigate("ChatRoom", {
+                                            name: selectedUser,
+                                        });
+                                    } else {
+                                        navigation.navigate("ChatRoom", {
+                                            name: selectedUser,
+                                        });
+                                    }
                                 }}
                             >
                                 <Icon name="chat" type="material" size="50" />
@@ -146,15 +197,16 @@ export default function HomePage({ navigation }) {
             </View>
         );
     };
-    const onFriendPress = (friend) => {
-        setSelectedUser(friend);
+    const onFriendPress = (name, ID) => {
+        setSelectedUser(name);
+        setSelectedID(ID);
         setModalVisible(true);
     };
     const renderFriend = (friend) => {
         return (
             <TouchableHighlight
-                key={friends}
-                onPress={() => onFriendPress(friend)}
+                key={friend.ID}
+                onPress={() => onFriendPress(friend.Username, friend.ID)}
             >
                 <View style={styles.Profile}>
                     <Image
@@ -170,10 +222,10 @@ export default function HomePage({ navigation }) {
                         }}
                     />
                     <View style={styles.subProfile}>
-                        <Text style={styles.title}>{friend}</Text>
+                        <Text style={styles.title}>{friend.Username}</Text>
                         <Text
                             style={styles.subtitle}
-                        >{`Status : ${status}`}</Text>
+                        >{`Status : ${friend.Status}`}</Text>
                     </View>
                 </View>
             </TouchableHighlight>
@@ -182,6 +234,35 @@ export default function HomePage({ navigation }) {
     return (
         <View style={styles.container}>
             <View>
+                <Text>{getSession().token}</Text>
+                <Button
+                    style={{ width: 250 }}
+                    title="Login"
+                    type="solid"
+                    onPress={() =>
+                        dispatch(
+                            login({ username: "User1", password: "12345" })
+                        )
+                    }
+                />
+                <Button
+                    style={{ width: 250 }}
+                    title="Get Friend"
+                    type="solid"
+                    onPress={() => {
+                        console.log(friendList);
+                        dispatch(getFriends());
+                    }}
+                />
+                <Button
+                    style={{ width: 250 }}
+                    title="Get Chat"
+                    type="solid"
+                    onPress={() => {
+                        dispatch(getAllChat());
+                        console.log(chatRoomList);
+                    }}
+                />
                 <FlatList
                     data={profile}
                     renderItem={({ item, separators }) => (
@@ -223,7 +304,7 @@ export default function HomePage({ navigation }) {
                     <Text style={styles.title}>{friends.length}</Text>
                 </View>
                 <FlatList
-                    data={friends}
+                    data={friendList}
                     renderItem={({ item }) => renderFriend(item)}
                 />
                 {renderModal()}
@@ -284,9 +365,11 @@ const styles = StyleSheet.create({
         // elevation: 5,
     },
     button: {
-        borderRadius: 20,
+        borderRadius: 5,
         padding: 10,
         elevation: 2,
+        width: 200,
+        margin: 10,
     },
     buttonOpen: {
         backgroundColor: "#F194FF",

@@ -11,10 +11,11 @@ import NotFoundScreen from "../screens/NotFoundScreen";
 import { RootStackParamList } from "../../types";
 import BottomTabNavigator from "./BottomTabNavigator";
 import LinkingConfiguration from "./LinkingConfiguration";
+import LoginNavigator from "./LoginNavigator";
 import ChatRoomNavigator from "./ChatRoomNavigator";
 import ChatRoomScreen from "../screens/ChatRoomScreen";
 import LandingPage from "../screens/LandingPage";
-
+import { setSession, getSession, isSessionExpire } from "../lib/session";
 import { useSelector, useDispatch } from "react-redux";
 
 // If you are not familiar with React Navigation, we recommend going through the
@@ -25,12 +26,13 @@ export default function Navigation({
     colorScheme: ColorSchemeName;
 }) {
     const { isLogin } = useSelector((state: RootState) => state.user);
+    React.useEffect(() => {}, [isLogin]);
     return (
         <NavigationContainer
-            linking={LinkingConfiguration}
+            // linking={LinkingConfiguration}
             theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
         >
-            {isLogin ? <RootNavigator /> : <LandingPage />}
+            {isLogin ? <RootNavigator /> : <LoginNavigator />}
         </NavigationContainer>
     );
 }

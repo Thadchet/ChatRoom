@@ -5,6 +5,14 @@ import {
     WATCH_STATUS,
     UPDATE_IS_LOGIN,
     UPDATE_STATUS,
+    UPDATE_USERNAME,
+    WATCH_FIND_USER,
+    WATCH_FIND_USER_PROFILE,
+    UPDATE_FIND_USER,
+    UPDATE_FIND_USER_PROFILE,
+    UPDATE_IS_FOUND_USER,
+    UPDATE_FRIEND_LIST,
+    WATCH_FRIEND_LIST,
 } from "../types";
 
 interface UserState {
@@ -12,13 +20,21 @@ interface UserState {
     status: string;
     token: string;
     isLogin: bool;
+    isFoundUser: bool;
+    findUsername: string;
+    findUserProfile: string;
+    friendList: any[];
 }
 
 const initialState: UserState = {
-    username: "Bosskungg",
-    status: "Hi I am redux !!",
+    username: "",
+    status: "",
     token: "token",
     isLogin: false,
+    isFoundUser: false,
+    findUsername: "",
+    findUserProfile: "",
+    friendList: [],
 };
 
 export function userReducer(
@@ -54,6 +70,54 @@ export function userReducer(
             return {
                 ...state,
                 status: action.payload,
+            };
+        }
+        case UPDATE_USERNAME: {
+            return {
+                ...state,
+                username: action.payload,
+            };
+        }
+        case WATCH_FIND_USER: {
+            return {
+                ...state,
+                findUsername: action.payload,
+            };
+        }
+        case WATCH_FIND_USER_PROFILE: {
+            return {
+                ...state,
+                findUserProfile: action.payload,
+            };
+        }
+        case UPDATE_FIND_USER: {
+            return {
+                ...state,
+                findUsername: action.payload,
+            };
+        }
+        case UPDATE_FIND_USER_PROFILE: {
+            return {
+                ...state,
+                findUserProfile: action.payload,
+            };
+        }
+        case UPDATE_IS_FOUND_USER: {
+            return {
+                ...state,
+                isFoundUser: action.payload,
+            };
+        }
+        case UPDATE_FRIEND_LIST: {
+            return {
+                ...state,
+                friendList: action.payload,
+            };
+        }
+        case WATCH_FRIEND_LIST: {
+            return {
+                ...state,
+                friendList: action.payload,
             };
         }
         default:

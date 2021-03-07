@@ -13,22 +13,19 @@ import {
 } from "../redux/actions/stories.actions";
 import { useSelector, useDispatch } from "react-redux";
 
-export default function LandingPage({ navigation }) {
+export default function RegisterPage({ navigation }) {
     const [username, setUsername] = React.useState("");
     const [password, setPassword] = React.useState("");
     const dispatch = useDispatch();
-    const onLoginPress = () => {
-        dispatch(login({ username, password }));
+    
+    const onRegisterPress = () => {
+        dispatch(register({ username, password }));
     };
 
-    const onRegisterPress = () => {
-        navigation.navigate("Register")
-    };
-    const { isLogin } = useSelector((state: RootState) => state.user);
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Login Page</Text>
+            <Text style={styles.title}>Register Page</Text>
             <View
                 style={styles.separator}
                 lightColor="#eee"
@@ -44,12 +41,6 @@ export default function LandingPage({ navigation }) {
                     onChangeText={(value) => setPassword(value)}
                 />
             </View>
-            <Button
-                style={{ width: 250 }}
-                title="Login"
-                type="solid"
-                onPress={() => onLoginPress()}
-            />
             <Button
                 style={{ width: 250, marginTop: 10 }}
                 title="Register"

@@ -1,30 +1,17 @@
 import * as React from "react";
 import { StyleSheet, FlatList, Image, TouchableHighlight } from "react-native";
-
+import { Input, Button } from "react-native-elements";
 import EditScreenInfo from "../components/EditScreenInfo";
 import { Text, View } from "../components/Themed";
-
-const ListData = () => {
-    return [
-        { key: "Devin" },
-        { key: "Dan" },
-        { key: "Dominic" },
-        { key: "Jackson" },
-        { key: "James" },
-        { key: "Joel" },
-        { key: "John" },
-        { key: "Jillian" },
-        { key: "Jimmy" },
-        { key: "Julie" },
-    ];
-};
+import { RootState } from "../redux/reducers";
+import { useSelector, useDispatch } from "react-redux";
+import { createChat, getAllChat } from "../redux/actions/chat.actions";
 
 export default function ChatScreen({ navigation }) {
     const [list, setList] = React.useState([]);
+    const dispatch = useDispatch();
 
-    React.useEffect(() => {
-        setList(ListData);
-    }, []);
+    const { chatRoomList } = useSelector((state: RootState) => state.chat);
 
     const onChatPress = (item) => {
         console.log(item);
@@ -35,11 +22,11 @@ export default function ChatScreen({ navigation }) {
         <View style={styles.container}>
             <View style={styles.containerChat}>
                 <FlatList
-                    data={list}
+                    data={chatRoomList}
                     renderItem={({ item, separators }) => (
                         <TouchableHighlight
-                            key={item.key}
-                            onPress={() => onChatPress(item.key)}
+                            key={item.RoomID}
+                            onPress={() => onChatPress(item.RoomName)}
                             onShowUnderlay={separators.highlight}
                             onHideUnderlay={separators.unhighlight}
                         >
@@ -57,10 +44,10 @@ export default function ChatScreen({ navigation }) {
                                     }}
                                 />
                                 <View style={styles.subItem}>
-                                    <Text style={styles.title}>{item.key}</Text>
+                                    <Text style={styles.title}>{item.RoomName}</Text>
                                     <Text
                                         style={styles.subtitle}
-                                    >{`Hello worldddffdfdfdfdfdfd`}</Text>
+                                    >{`Hello world`}</Text>
                                 </View>
                                 <Text style={styles.time}>{`16:28`}</Text>
                             </View>
@@ -104,7 +91,6 @@ const styles = StyleSheet.create({
         flex: 1,
         margin: 10,
         flexDirection: "column",
-        
     },
     time: {
         padding: 10,
