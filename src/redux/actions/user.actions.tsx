@@ -12,7 +12,9 @@ import {
 import { userService } from "../../services";
 import { StoryInterface, UserActionTypes } from "../types";
 import { ActionCreator } from "redux";
-import { setSession } from "../../lib/session";
+import { setSession, clearSession } from "../../lib/session";
+import Navigation from "../../lib/Navigation";
+
 // Set Token
 const loginSuccess: ActionCreator<UserActionTypes> = (token: String) => {
     return { type: UPDATE_TOKEN, payload: token };
@@ -50,6 +52,22 @@ const updateIsFoundUser: ActionCreator<UserActionTypes> = (
     return { type: UPDATE_IS_FOUND_USER, payload: isFound };
 };
 
+export function logout() {
+    return (dispatch) => {
+        dispatch(request());
+        return userService.logout().then(
+            (response) => {
+                clearSession({});
+                dispatch(updateIsLogin(false));
+            },
+            (error) => {
+                console.log("POST RESPONSE ERROR: " + JSON.stringify(error));
+                dispatch(failure("Server error."));
+            }
+        );
+    };
+}
+
 export function login({
     username,
     password,
@@ -61,13 +79,12 @@ export function login({
         dispatch(request());
         return userService.login({ username, password }).then(
             (response) => {
-                console.log(response.token);
                 setSession({ token: response.token });
                 dispatch(loginSuccess(response.token));
                 dispatch(updateIsLogin(true));
             },
             (error) => {
-                console.log("POST RESPONSE: " + JSON.stringify(error));
+                console.log("POST RESPONSE ERROR: " + JSON.stringify(error));
                 dispatch(failure("Server error."));
             }
         );
@@ -86,8 +103,6 @@ export function register({
         return userService.register({ username, password }).then(
             (response) => {
                 console.log(response);
-                // dispatch(loginSuccess(response.token));
-                // dispatch(updateIsLogin(true));
             },
             (error) => {
                 console.log("POST RESPONSE: " + JSON.stringify(error));
@@ -107,7 +122,9 @@ export function getUser() {
                 dispatch(updateStatus(response.Status));
             },
             (error) => {
-                console.log("GET RESPONSE: " + JSON.stringify(error));
+                console.log(
+                    "GET RESPONSE ERROR GET USER: " + JSON.stringify(error)
+                );
                 dispatch(failure("Server error."));
             }
         );

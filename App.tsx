@@ -10,10 +10,10 @@ import { Provider } from "react-redux";
 import { store } from "./src/redux";
 import { setSession } from "./src/lib/session";
 
-export default function App({ Token }) {
+export default function App() {
     const isLoadingComplete = useCachedResources();
     const colorScheme = useColorScheme();
-    setSession({ token: Token });
+    // setSession({ token: Token });
     if (!isLoadingComplete) {
         return null;
     } else {
@@ -21,7 +21,7 @@ export default function App({ Token }) {
             <Provider store={store}>
                 <SafeAreaProvider>
                     <Navigation colorScheme={colorScheme} />
-                    <StatusBar />
+                    {/* <StatusBar /> */}
                 </SafeAreaProvider>
             </Provider>
         );

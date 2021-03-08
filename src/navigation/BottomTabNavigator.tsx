@@ -11,6 +11,7 @@ import useColorScheme from "../hooks/useColorScheme";
 import ChatScreen from "../screens/ChatScreen";
 import TabTwoScreen from "../screens/TabTwoScreen";
 import HomePage from "../screens/HomePage";
+import SettingScreen from "../screens/SettingScreen";
 import {
     BottomTabParamList,
     TabOneParamList,
@@ -49,7 +50,7 @@ export default function BottomTabNavigator() {
             />
             <BottomTab.Screen
                 name="TabTwo"
-                component={TabTwoNavigator}
+                component={TabSettingNavigator}
                 options={{
                     tabBarIcon: ({ color }) => (
                         <TabBarIcon name="ios-code" color={color} />
@@ -101,16 +102,16 @@ function TabChatNavigator() {
     );
 }
 
-const TabTwoStack = createStackNavigator<TabTwoParamList>();
+const TabSettingStack = createStackNavigator<TabTwoParamList>();
 
-function TabTwoNavigator() {
+function TabSettingNavigator() {
     return (
-        <TabTwoStack.Navigator>
-            <TabTwoStack.Screen
-                name="TabTwoScreen"
-                component={TabTwoScreen}
-                options={{ headerTitle: "Tab Two Title" }}
+        <TabSettingStack.Navigator>
+            <TabSettingStack.Screen
+                name="Setting"
+                component={SettingScreen}
+                options={{ headerTitle: "Setting" }}
             />
-        </TabTwoStack.Navigator>
+        </TabSettingStack.Navigator>
     );
 }

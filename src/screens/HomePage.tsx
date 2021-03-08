@@ -6,6 +6,7 @@ import {
     TouchableHighlight,
     Modal,
     Pressable,
+    RefreshControl,
 } from "react-native";
 import { Input, Button } from "react-native-elements";
 import { Icon } from "react-native-elements";
@@ -20,8 +21,12 @@ import {
 } from "../redux/actions/user.actions";
 import { createChat, getAllChat } from "../redux/actions/chat.actions";
 import { RootState } from "../redux/reducers";
-import { setSession, getSession, isSessionExpire } from "../lib/session";
+import { getSession, isSessionExpire } from "../lib/session";
 import _ from "lodash";
+
+const wait = (timeout) => {
+    return new Promise((resolve) => setTimeout(resolve, timeout));
+};
 
 export default function HomePage({ navigation }) {
     const [profile, setProfile] = React.useState([{ key: "bosskung" }]);
@@ -31,6 +36,7 @@ export default function HomePage({ navigation }) {
     const [selectedUser, setSelectedUser] = React.useState("");
     const [selectedID, setSelectedID] = React.useState("");
     const [findUserInput, setFindUserInput] = React.useState("");
+    const [refreshing, setRefreshing] = React.useState(false);
 
     const dispatch = useDispatch();
     const {
@@ -43,6 +49,11 @@ export default function HomePage({ navigation }) {
         friendList,
     } = useSelector((state: RootState) => state.user);
     const { chatRoomList } = useSelector((state: RootState) => state.chat);
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        wait(2000).then(() => setRefreshing(false));
+    }, []);
 
     React.useEffect(() => {
         dispatch(getUser());
@@ -234,7 +245,7 @@ export default function HomePage({ navigation }) {
     return (
         <View style={styles.container}>
             <View>
-                <Text>{getSession().token}</Text>
+                {/* <Text>{getSession().token}</Text>
                 <Button
                     style={{ width: 250 }}
                     title="Login"
@@ -262,32 +273,27 @@ export default function HomePage({ navigation }) {
                         dispatch(getAllChat());
                         console.log(chatRoomList);
                     }}
-                />
-                <FlatList
-                    data={profile}
-                    renderItem={({ item, separators }) => (
-                        <View style={styles.Profile}>
-                            <Image
-                                source={{
-                                    uri:
-                                        "https://chatroom-bosskung.s3-ap-southeast-1.amazonaws.com/user-profile/0fb.jpg",
-                                }}
-                                style={{
-                                    width: 50,
-                                    height: 50,
-                                    margin: 10,
-                                    borderRadius: 200 / 2,
-                                }}
-                            />
-                            <View style={styles.subProfile}>
-                                <Text style={styles.title}>{username}</Text>
-                                <Text
-                                    style={styles.subtitle}
-                                >{`Status : ${status}`}</Text>
-                            </View>
-                        </View>
-                    )}
-                />
+                /> */}
+                <View style={styles.Profile}>
+                    <Image
+                        source={{
+                            uri:
+                                "https://chatroom-bosskung.s3-ap-southeast-1.amazonaws.com/user-profile/0fb.jpg",
+                        }}
+                        style={{
+                            width: 50,
+                            height: 50,
+                            margin: 10,
+                            borderRadius: 200 / 2,
+                        }}
+                    />
+                    <View style={styles.subProfile}>
+                        <Text style={styles.title}>{username}</Text>
+                        <Text
+                            style={styles.subtitle}
+                        >{`Status : ${status}`}</Text>
+                    </View>
+                </View>
                 <View
                     style={styles.separator}
                     lightColor="#eee"
@@ -330,7 +336,6 @@ const styles = StyleSheet.create({
         width: "100%",
     },
     Profile: {
-        flex: 1,
         flexDirection: "row",
         padding: 5,
     },

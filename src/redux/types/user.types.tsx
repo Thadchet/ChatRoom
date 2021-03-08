@@ -8,6 +8,7 @@ export const WATCH_FIND_USER = "WATCH_FIND_USER";
 export const WATCH_FIND_USER_PROFILE = "WATCH_FIND_USER_PROFILE";
 export const WATCH_IS_FOUND_USER = "WATCH_IS_FOUND_USER";
 export const WATCH_FRIEND_LIST = "WATCH_FRIEND_LIST";
+export const WATCH_USER_ID = "WATCH_USER_ID";
 
 export const UPDATE_TOKEN = "UPDATE_TOKEN";
 export const UPDATE_USERNAME = "UPDATE_USERNAME";
@@ -17,6 +18,7 @@ export const UPDATE_FIND_USER = "UPDATE_FIND_USER";
 export const UPDATE_FIND_USER_PROFILE = "UPDATE_FIND_USER_PROFILE";
 export const UPDATE_IS_FOUND_USER = "UPDATE_IS_FOUND_USER";
 export const UPDATE_FRIEND_LIST = "UPDATE_FRIEND_LIST";
+export const UPDATE_USER_ID = "UPDATE_USER_ID";
 
 interface WatchUsernameAction {
     type: typeof WATCH_USERNAME;
@@ -98,6 +100,16 @@ interface UpdateFriendListAction {
     payload: String;
 }
 
+interface WatchUserIDAction {
+    type: typeof WATCH_USER_ID;
+    payload: String;
+}
+
+interface UpdateUserIDAction {
+    type: typeof UPDATE_USER_ID;
+    payload: String;
+}
+
 export type UserActionTypes =
     | WatchUsernameAction
     | WatchStatusAction
@@ -114,4 +126,6 @@ export type UserActionTypes =
     | UpdateIsFoundUserAction
     | WatchIsFoundUserAction
     | UpdateFriendListAction
-    | WatchFriendListAction;
+    | WatchFriendListAction
+    | WatchUserIDAction
+    | UpdateUserIDAction;

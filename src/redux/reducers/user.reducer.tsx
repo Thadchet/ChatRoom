@@ -13,9 +13,12 @@ import {
     UPDATE_IS_FOUND_USER,
     UPDATE_FRIEND_LIST,
     WATCH_FRIEND_LIST,
+    UPDATE_USER_ID,
+    WATCH_USER_ID,
 } from "../types";
 
 interface UserState {
+    userID: string;
     username: string;
     status: string;
     token: string;
@@ -27,6 +30,7 @@ interface UserState {
 }
 
 const initialState: UserState = {
+    userID: "",
     username: "",
     status: "",
     token: "token",
@@ -118,6 +122,18 @@ export function userReducer(
             return {
                 ...state,
                 friendList: action.payload,
+            };
+        }
+        case UPDATE_USER_ID: {
+            return {
+                ...state,
+                userID: action.payload,
+            };
+        }
+        case WATCH_USER_ID: {
+            return {
+                ...state,
+                userID: action.payload,
             };
         }
         default:

@@ -5,6 +5,7 @@ import { getFromServer, postToServer } from "./helper.services";
 
 export const userService = {
     login,
+    logout,
     register,
     getUser,
     findUser,
@@ -56,4 +57,9 @@ async function findUser({ username }: { username: String }): Promise<any> {
 async function getFriends(): Promise<any> {
     console.log("getFriends service");
     return await getFromServer(apiEndpoint + "user/get-friend");
+}
+
+async function logout(): Promise<any> {
+    console.log("Logout service");
+    return testData.stories;
 }

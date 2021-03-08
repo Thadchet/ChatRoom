@@ -15,7 +15,7 @@ import LoginNavigator from "./LoginNavigator";
 import ChatRoomNavigator from "./ChatRoomNavigator";
 import ChatRoomScreen from "../screens/ChatRoomScreen";
 import LandingPage from "../screens/LandingPage";
-import { setSession, getSession, isSessionExpire } from "../lib/session";
+import { getSession, isSessionExpire } from "../lib/session";
 import { useSelector, useDispatch } from "react-redux";
 
 // If you are not familiar with React Navigation, we recommend going through the
@@ -26,7 +26,9 @@ export default function Navigation({
     colorScheme: ColorSchemeName;
 }) {
     const { isLogin } = useSelector((state: RootState) => state.user);
-    React.useEffect(() => {}, [isLogin]);
+    React.useEffect(() => {
+        console.log("Check Login");
+    }, [isLogin]);
     return (
         <NavigationContainer
             // linking={LinkingConfiguration}

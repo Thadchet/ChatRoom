@@ -20,7 +20,7 @@ const ChatRoom = createStackNavigator<ChatRoomParamList>();
 
 export default function ChatRoomNavigator({ route }) {
     const colorScheme = useColorScheme();
-    const { name } = route.params;
+    const { name, roomID } = route.params;
     return (
         <ChatRoom.Navigator
             initialRouteName="ChatRoom2"
@@ -30,6 +30,7 @@ export default function ChatRoomNavigator({ route }) {
                 name="ChatRoom2"
                 component={ChatRoomScreen}
                 options={{ headerTitle: name }}
+                initialParams={{ roomID }}
             />
         </ChatRoom.Navigator>
     );

@@ -18,9 +18,12 @@ export const authorized = () => {
 export const setSession = (data) => {
     _session = data;
     _timestamp = new Date().getTime();
+    // AsyncStorage.setItem(AUTHEN_SESSION, JSON.stringify(data));
 };
 
 export const getSession = () => {
+    // return AsyncStorage.getItem(AUTHEN_SESSION);
+
     return _session;
 };
 
